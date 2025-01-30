@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ parent() }}
+	Liste des monnaies
+{% endblock %}
+
+{% block content %}
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-10 text-primary">
+				<h1 class="text-center text-black">Liste des monnaies</h1>
+				{% for currency in currency %}
+					{{currency.id}}
+					{{currency.name}}
+                    <a href="index.php?page=updateCurrency&id={{currency.id}}"><i class="bi bi-pen-fill"></i></a>
+                    <a href="index.php?page=deleteCurrency&id={{currency.id}}"><i class="bi bi-trash2-fill"></i></a><br/>
+					{% endfor%}
+
+				</div>
+			</div>
+		</div>
+	{% endblock %}

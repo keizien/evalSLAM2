@@ -27,7 +27,22 @@ class Router
         $this->pageMappings = [
             'home' => [DefaultController::class, 'home'],
             '404' => [DefaultController::class, 'error404'],
+            'contact' => [DefaultController::class, 'contact'],
+            'mentionsLegales' => [DefaultController::class, 'mentionsLegales'],
             '500' => [DefaultController::class, 'error500'],
+            'types' => [DefaultController::class, 'types'],
+            'products' => [DefaultController::class, 'products'],
+            'users' => [DefaultController::class, 'users'],
+            'updateType' =>[DefaultController::class, 'updateType'],
+            'updateProducts' =>[DefaultController::class, 'updateProducts'],
+            'addType' =>[DefaultController::class, 'addType'],
+            'addProducts' =>[DefaultController::class, 'addProducts'],
+            'deleteType' =>[DefaultController::class, 'deleteType'],
+            'deleteProducts' =>[DefaultController::class, 'deleteProducts'],
+            'currency' =>[DefaultController::class, 'currency'],
+            'updateCurrency' =>[DefaultController::class, 'updateCurrency'],
+            'addCurrency' =>[DefaultController::class, 'addCurrency'],
+            'deleteCurrency' =>[DefaultController::class, 'deleteCurrency'],
         ];
         $this->defaultPage = 'home';
         $this->errorPage = '404';
