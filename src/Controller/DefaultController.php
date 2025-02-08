@@ -48,9 +48,9 @@ class DefaultController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-            if (!empty($_POST['name'])) {
-                $zone = new EconomicZone(intVal($id), $name);
+            $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_STRING);
+            if (!empty($_POST['nom'])) {
+                $zone = new EconomicZone(intVal($id), $nom);
                 $success = $this->economicZoneModel->updateEconomicZone($zone);
                 if ($success) {
                     header('Location: index.php?page=economicZone');
@@ -66,9 +66,9 @@ class DefaultController
     public function addEconomicZone()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-            if (!empty($_POST['name'])) {
-                $zone = new EconomicZone(null, $name);
+            $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_STRING);
+            if (!empty($_POST['nom'])) {
+                $zone = new EconomicZone(null, $nom);
                 $success = $this->economicZoneModel->createEconomicZone($zone);
                 if ($success) {
                     header('Location: index.php?page=economicZone');
