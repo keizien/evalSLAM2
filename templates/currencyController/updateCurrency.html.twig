@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	{{ parent() }}
+	Modifier une monnaie
+{% endblock %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-6 align-items-center">
+				<h1 class="text-center text-primary fw-bold m-2">Modifier une monnaie</h1>
+				<form action="" method="post">
+					<input type="hidden" id="id" name="id" value="{{currency.id}}">
+					<input type="text" id="name" name="name" class="form-control" placeholder="désignation" value="{{currency.name}}" required>
+					<select id="idZone" name="idZone" class="form-control" required>
+						{% for z in zones %}
+							{% if z.id == currency.zone.id %}
+								<option value="{{z.id}}" selected>{{z.nom}}</option>
+							{% else %}
+								<option value="{{z.id}}">{{z.nom}}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+					<div class="text-center">
+						<input type="submit" value="Modifier" class="btn btn-primary m-2">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

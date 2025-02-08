@@ -13,13 +13,10 @@
 				{% for product in products %}
 					{{product.id}}
 					{{product.nom}}
-					{{product.prix}}€<a href="index.php?page=updateProducts&id={{product.id}}">
-						<i class="bi bi-pen-fill"></i>
-					</a>
-					<a href="index.php?page=deleteProducts&id={{product.id}}">
-						<i class="bi bi-trash2-fill"></i>
-					</a><br/>
-					{% endfor%}
+					{{product.prix}}€
+					{{product.description}}
+					{{product.stock}}
+					{% endfor %}
 
 				</div>
 			</div>

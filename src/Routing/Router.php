@@ -5,6 +5,8 @@ declare (strict_types = 1);
 namespace MyApp\Routing;
 
 use MyApp\Controller\DefaultController;
+use MyApp\Controller\ProductController;
+use MyApp\Controller\CurrencyController;
 use MyApp\Controller\UserController;
 use MyApp\Service\DependencyContainer;
 
@@ -31,18 +33,24 @@ class Router
             'mentionsLegales' => [DefaultController::class, 'mentionsLegales'],
             '500' => [DefaultController::class, 'error500'],
             'types' => [DefaultController::class, 'types'],
-            'products' => [DefaultController::class, 'products'],
+            'produits' =>[ProductController::class, 'produits'],
+            'products' => [ProductController::class, 'listProducts'],
             'users' => [DefaultController::class, 'users'],
             'updateType' =>[DefaultController::class, 'updateType'],
-            'updateProducts' =>[DefaultController::class, 'updateProducts'],
+            'updateProducts' =>[ProductController::class, 'updateProducts'],
             'addType' =>[DefaultController::class, 'addType'],
-            'addProducts' =>[DefaultController::class, 'addProducts'],
+            'addProducts' =>[ProductController::class, 'addProducts'],
             'deleteType' =>[DefaultController::class, 'deleteType'],
             'deleteProducts' =>[DefaultController::class, 'deleteProducts'],
-            'currency' =>[DefaultController::class, 'currency'],
-            'updateCurrency' =>[DefaultController::class, 'updateCurrency'],
-            'addCurrency' =>[DefaultController::class, 'addCurrency'],
+            'currency' =>[CurrencyController::class, 'currency'],
+            'updateCurrency' =>[CurrencyController::class, 'updateCurrency'],
+            'addCurrency' =>[CurrencyController::class, 'addCurrency'],
             'deleteCurrency' =>[DefaultController::class, 'deleteCurrency'],
+            'economicZone' =>[DefaultController::class, 'economicZone'],
+            'updateEconomicZone' =>[DefaultController::class, 'updateEconomicZone'],
+            'addEconomicZone' =>[DefaultController::class, 'addEconomicZone'],
+            'deleteEconomicZone' =>[DefaultController::class, 'deleteEconomicZone'],
+            'listCurrency' =>[CurrencyController::class, 'listCurrency'],
         ];
         $this->defaultPage = 'home';
         $this->errorPage = '404';

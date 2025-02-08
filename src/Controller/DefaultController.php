@@ -3,9 +3,10 @@ declare (strict_types = 1);
 namespace MyApp\Controller;
 
 use MyApp\Entity\Currency;
-use MyApp\Entity\Produit;
+use MyApp\Entity\EconomicZone;
 use MyApp\Entity\Type;
 use MyApp\Model\CurrencyModel;
+use MyApp\Model\EconomicZoneModel;
 use MyApp\Model\ProduitModel;
 use MyApp\Model\TypeModel;
 use MyApp\Model\UserModel;
@@ -19,6 +20,7 @@ class DefaultController
     private $produitModel;
     private $userModel;
     private $currencyModel;
+    private $economicZoneModel;
 
     public function __construct(Environment $twig, DependencyContainer $dependencyContainer)
     {
@@ -27,12 +29,60 @@ class DefaultController
         $this->produitModel = $dependencyContainer->get('ProduitModel');
         $this->userModel = $dependencyContainer->get('UserModel');
         $this->currencyModel = $dependencyContainer->get('CurrencyModel');
+        $this->economicZoneModel = $dependencyContainer->get('EconomicZoneModel');
     }
 
     public function types()
     {
         $types = $this->typeModel->getAllTypes();
         echo $this->twig->render('defaultController/types.html.twig', ['types' => $types]);
+    }
+
+    public function economicZone()
+    {
+        $zones = $this->economicZoneModel->getAllEconomicZones();
+        echo $this->twig->render('defaultController/economicZone.html.twig', ['zones' => $zones]);
+    }
+
+    public function updateEconomicZone()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
+            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+            if (!empty($_POST['name'])) {
+                $zone = new EconomicZone(intVal($id), $name);
+                $success = $this->economicZoneModel->updateEconomicZone($zone);
+                if ($success) {
+                    header('Location: index.php?page=economicZone');
+                }
+            }
+        } else {
+            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        }
+        $zone = $this->economicZoneModel->getOneEconomicZone(intVal($id));
+        echo $this->twig->render('defaultController/updateEconomicZone.html.twig', ['zone' => $zone]);
+    }
+
+    public function addEconomicZone()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+            if (!empty($_POST['name'])) {
+                $zone = new EconomicZone(null, $name);
+                $success = $this->economicZoneModel->createEconomicZone($zone);
+                if ($success) {
+                    header('Location: index.php?page=economicZone');
+                }
+            }
+        }
+        echo $this->twig->render('defaultController/addEconomicZone.html.twig', []);
+    }
+
+    public function deleteEconomicZone()
+    {
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        $this->economicZoneModel->deleteEconomicZone(intVal($id));
+        header('Location: index.php?page=economicZone');
     }
 
     public function home()
@@ -60,22 +110,10 @@ class DefaultController
         echo $this->twig->render('defaultController/mentionsLegales.html.twig', []);
     }
 
-    public function products()
-    {
-        $products = $this->produitModel->getAllProducts();
-        echo $this->twig->render('defaultController/products.html.twig', ['products' => $products]);
-    }
-
     public function users()
     {
         $users = $this->userModel->getAllUsers();
         echo $this->twig->render('defaultController/users.html.twig', ['users' => $users]);
-    }
-
-    public function currency()
-    {
-        $currency = $this->currencyModel->getAllCurrency();
-        echo $this->twig->render('defaultController/currency.html.twig', ['currency' => $currency]);
     }
 
     public function updateType()
@@ -97,26 +135,6 @@ class DefaultController
         echo $this->twig->render('defaultController/updateType.html.twig', ['type' => $type]);
     }
 
-    public function updateProducts()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-            $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_STRING);
-            $prix = filter_input(INPUT_POST, 'prix', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-            if (!empty($_POST['nom'])&($_POST['prix'])) {
-                $products = new Produit(intVal($id), $nom, floatVal($prix));
-                $success = $this->produitModel->updateProducts($products);
-                if ($success) {
-                    header('Location: index.php?page=products');
-                }
-            }
-        } else {
-            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        }
-        $products = $this->produitModel->getOneProduct(intVal($id));
-        echo $this->twig->render('defaultController/updateProducts.html.twig', ['products' => $products]);
-    }
-
     public function addType()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -132,22 +150,6 @@ class DefaultController
         echo $this->twig->render('defaultController/addType.html.twig', []);
     }
 
-    public function addProducts()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_STRING);
-            $prix = filter_input(INPUT_POST, 'prix', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-            if (!empty($_POST['nom'])&($_POST['prix'])) {
-                $products = new Produit(null, $nom, floatVal($prix));
-                $success = $this->produitModel->createProducts($products);
-                if ($success) {
-                    header('Location: index.php?page=addProducts');
-                }
-            }
-        }
-        echo $this->twig->render('defaultController/addProducts.html.twig', []);
-    }
-
     public function deleteType()
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -160,41 +162,6 @@ class DefaultController
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
         $this->produitModel->deleteProducts(intVal($id));
         header('Location: index.php?page=products');
-    }
-
-
-    public function updateCurrency()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-            if (!empty($_POST['name'])) {
-                $currency = new Currency(intVal($id), $name);
-                $success = $this->currencyModel->updateCurrency($currency);
-                if ($success) {
-                    header('Location: index.php?page=currency');
-                }
-            }
-        } else {
-            $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-        }
-        $currency = $this->currencyModel->getOneCurrency(intVal($id));
-        echo $this->twig->render('defaultController/updateCurrency.html.twig', ['currency' => $currency]);
-    }
-
-    public function addCurrency()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-            if (!empty($_POST['name'])) {
-                $currency = new Currency(null, $name);
-                $success = $this->currencyModel->createCurrency($currency);
-                if ($success) {
-                    header('Location: index.php?page=currency');
-                }
-            }
-        }
-        echo $this->twig->render('defaultController/addCurrency.html.twig', []);
     }
 
     public function deleteCurrency()

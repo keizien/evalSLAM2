@@ -2,14 +2,18 @@
 declare (strict_types = 1);
 namespace MyApp\Entity;
 
+use MyApp\Entity\EconomicZone;
+
 class Currency
 {
     private ?int $id = null;
     private string $name;
-    public function __construct(?int $id, string $name)
+    private EconomicZone $zone;
+    public function __construct(?int $id, string $name, EconomicZone $zone)
     {
         $this->id = $id;
         $this->name = $name;
+        $this->zone = $zone;
     }
     public function getId(): ?int
     {
@@ -26,5 +30,13 @@ class Currency
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+    public function getEconomicZone(): EconomicZone
+    {
+        return $this->zone;
+    }
+    public function setEconomicZone(EconomicZone $zone): void
+    {
+        $this->zone = $zone;
     }
 }
