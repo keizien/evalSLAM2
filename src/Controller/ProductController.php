@@ -3,6 +3,7 @@ declare (strict_types = 1);
 namespace MyApp\Controller;
 
 use MyApp\Entity\Produit;
+use MyApp\Entity\Upload;
 use MyApp\Model\ProduitModel;
 use MyApp\Model\TypeModel;
 use MyApp\Service\DependencyContainer;
@@ -26,10 +27,34 @@ class ProductController
             ['products' => $products]);
     }
 
-    public function produits(){
+    public function produits()
+    {
         $products = $this->produitModel->getAllProducts();
-        echo $this->twig->render('productController/produits.html.twig', ['products' => $products]);        }
+        echo $this->twig->render('productController/produits.html.twig', ['products' => $products]);       
+    }
 
+    public function avisProduct()
+    {
+        echo $this->twig->render('productController/avisProduct.html.twig', []);       
+    }
+
+    public function showProduct()
+    {
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+        $types = $this->typeModel->getAllTypes();
+        if (empty($id)) {
+            $_SESSION['message'] = 'Identifiant du produit manquant.';
+            header('Location: index.php?page=listProducts');
+            exit();
+        }
+        $product = $this->produitModel->getOneProduct(intVal($id));
+        if ($product == null) {
+            $_SESSION['message'] = 'Produit introuvable.';
+            header('Location: index.php?page=listProducts');
+            exit();
+        }
+        echo $this->twig->render('productController/showProduct.html.twig', ['product' => $product,'types'=> $types]);
+    }
 
     public function addProducts()
     {
@@ -45,6 +70,16 @@ class ProductController
                 FILTER_SANITIZE_NUMBER_INT);
             if (!empty($nom) && !empty($prix) && !empty($description) && !empty($stock)
                 && !empty($idType)) {
+                    $upload = new Upload(['png', 'gif', 'jpeg', 'jpg'], 'images/produits', 500000);
+                    $image = $upload->save('images');
+                    
+                    if ($image['error'] !== null) {
+                        echo 'Erreur lors de l\'upload :' .$image['error'];
+                        return;
+                    }
+
+                    $imageName = !empty($image['name']) ? $image['name'] : 'default.png';
+                    $product = new Produit(null, $nom, floatval($prix), $description, intVal($stock), $imageName);
                 $type = $this->typeModel->getOneType(intVal($idType));
                 if ($type == null) {
                     $_SESSION['message'] = 'Erreur sur le type.';

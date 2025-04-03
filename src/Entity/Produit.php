@@ -12,7 +12,8 @@ class Produit
     private string $description;
     private int $stock;
     private Type $type;
-    public function __construct(?int $id, string $nom, float $prix, string $description, int $stock, Type $type)
+    private ?string $image = null;
+    public function __construct(?int $id, string $nom, float $prix, string $description, int $stock, Type $type, ?string $image)
     {
         $this->id = $id;
         $this->nom = $nom;
@@ -20,6 +21,7 @@ class Produit
         $this->description = $description;
         $this->stock = $stock;
         $this->type = $type;
+        $this->image = $image;
     }
 
     public function getId(): ?int
@@ -77,6 +79,15 @@ class Produit
     public function setType(Type $type): void
     {
     $this->type = $type;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+    public function setImage(?string $image): void
+    {
+        $this->image = $image;
     }
     
 }

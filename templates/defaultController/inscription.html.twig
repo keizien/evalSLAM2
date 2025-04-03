@@ -1,0 +1,61 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ parent() }}
+	Inscription
+{% endblock %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-10 text-primary">
+				<h1 class="text-center text-black">Inscrivez-vous sur ShopShop</h1>
+				<form method="post" action="">
+					<div class="mb-3">
+						<label for="userName" class="form-label">Nom</label>
+						<input type="text" class="form-control" id="userNom" name="nom" required>
+					</div>
+                    <div class="mb-3">
+						<label for="userName" class="form-label">Prenom</label>
+						<input type="text" class="form-control" id="userPrenom" name="prenom" required>
+					</div>
+                    <div class="mb-3">
+						<label for="userEmail" class="form-label">Date de naissance</label>
+						<input type="text" class="form-control" id="userDateDeNaissance" name="date_de_naissance" required>
+					</div>
+                    <div class="mb-3">
+						<label for="userEmail" class="form-label">Rue</label>
+						<input type="text" class="form-control" id="userRue" name="rue" required>
+					</div>
+					<div class="mb-3">
+						<label for="userPassword" class="form-label">Ville</label>
+						<input type="text" class="form-control" id="userVille" name="ville" required>
+					</div>
+                    <div class="mb-3">
+						<label for="userName" class="form-label">Code postal</label>
+						<input type="text" class="form-control" id="userCodePostal" name="code_postal" required>
+					</div>
+					
+					<div class="mb-3">
+						<label for="userPassword" class="form-label">Telephone</label>
+						<input type="text" class="form-control" id="userTelephone" name="telephone" required>
+					</div>
+					<div class="mb-3">
+						<label for="userEmail" class="form-label">Email</label>
+						<input type="email" class="form-control" id="userEmail" name="email" required>
+					</div>
+					<div class="mb-3">
+						<label for="userPassword" class="form-label">Mot de Passe</label>
+						<input type="password" class="form-control" id="userPassword" name="password" required>
+					</div>
+					<div class="mb-3">
+						<label for="userPassword" class="form-label">Confirmation Mot de Passe</label>
+						<input type="password" class="form-control" id="userPassword" name="confirmedpassword" required>
+					</div>
+                    
+						<button type="submit" class="btn btnprimary text-black">S'inscrire</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

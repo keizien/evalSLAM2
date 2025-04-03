@@ -1,0 +1,32 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ parent() }} {{avis.note}}
+{% endblock %}
+
+{% block content %}        
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="images/produits/{{ product.image }}"/></div>
+                <div class="col-md-6">
+                    <div class="small mb-1">
+                        {% for a in avis %}
+                            {% if a.id == avis.user.id and a.id == avis.product.id %}
+                                {{u.prenom}}{{p.nom}}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <h1 class="display-5 fw-bolder text-primary">{{avis.commentaire}}</h1>
+                    <div class="fs-5 mb-5 text-primary">
+                        <span>{{avis.note}}</span>
+                    </div>
+                    <p class="lead text-primary">{{ avis.commentaire }}</p>
+                    <i class="bi bi-star-fill text-black"></i><i class="bi bi-star text-black"></i>
+                    <div class="d-flex">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

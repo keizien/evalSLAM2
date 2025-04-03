@@ -11,6 +11,7 @@
 			<div class="col-12 col-md-10 text-primary">
 				<h1 class="text-center text-black">Liste des produits</h1>
 				{% for product in products %}
+				<td> {% if (p.image) %} <img src"image/produits/{{p.image}}" alt="{{p.nom}}" class="image"/> {% endif %} </td>
 					{{product.id}}
 					{{product.nom}}
 					{{product.prix}}€

@@ -1,0 +1,43 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {{ parent() }} {{product.nom}}
+{% endblock %}
+
+{% block content %}        
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="images/produits/{{ product.image }}"/></div>
+                <div class="col-md-6">
+                    <div class="small mb-1">
+                        {% for t in types %}
+                            {% if t.id == product.type.id %}
+                                {{t.label}}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <h1 class="display-5 fw-bolder text-primary">{{product.nom}}</h1>
+                    <div class="fs-5 mb-5 text-primary">
+                        <span>{{product.prix}} €</span>
+                    </div>
+                    <p class="lead text-primary">{{ product.description }}</p>
+                    <i class="bi bi-star-fill text-black"></i><i class="bi bi-star-fill text-black"></i><i class="bi bi-star-fill text-black"></i><i class="bi bi-star-fill text-black"></i><i class="bi bi-star text-black"></i>
+                    <div class="d-flex">
+                        <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            <i class="bi-cart-fill me-1"></i>
+                            Ajouter au panier
+                        </button>
+                        {% if session.connexion is defined %}
+                            <td><a href="index.php?page=addAvis" class="btn btn-primary">Donnez votre avis</a></td>
+						{% else %}
+                            <td><a href="index.php?page=connexion" class="btn btn-primary">Donnez votre avis</a></td>
+                        {% endif %}
+                        <td><a href="index.php?page=showAvis" class="btn btn-primary">Lire les avis</a></td>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -2,9 +2,9 @@
 declare (strict_types = 1);
 namespace MyApp\Controller;
 
-use MyApp\Entity\Currency;
 use MyApp\Entity\EconomicZone;
 use MyApp\Entity\Type;
+use MyApp\Entity\User;
 use MyApp\Model\CurrencyModel;
 use MyApp\Model\EconomicZoneModel;
 use MyApp\Model\ProduitModel;
@@ -87,12 +87,18 @@ class DefaultController
 
     public function home()
     {
-        echo $this->twig->render('defaultController/home.html.twig', []);
+        $products = $this->produitModel->getAllProducts();
+        echo $this->twig->render('defaultController/home.html.twig', ['products' => $products]);
     }
 
     public function error404()
     {
         echo $this->twig->render('defaultController/error404.html.twig', []);
+    }
+
+    public function error403()
+    {
+        echo $this->twig->render('defaultController/error403.html.twig', []);
     }
 
     public function error500()
@@ -169,6 +175,106 @@ class DefaultController
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
         $this->currencyModel->deleteCurrency(intVal($id));
         header('Location: index.php?page=currency');
+    }
+
+    public function inscription()
+    {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nom = filter_input(INPUT_POST, 'nom', FILTER_SANITIZE_STRING);
+            $prenom = filter_input(INPUT_POST, 'prenom', FILTER_SANITIZE_STRING);
+            $date_de_naissance = filter_input(INPUT_POST, 'date_de_naissance', FILTER_SANITIZE_STRING);
+            $rue = filter_input(INPUT_POST, 'rue', FILTER_SANITIZE_STRING);
+            $ville = filter_input(INPUT_POST, 'ville', FILTER_SANITIZE_STRING);
+            $code_postal = filter_input(INPUT_POST, 'code_postal', FILTER_SANITIZE_STRING);
+            $telephone = filter_input(INPUT_POST, 'telephone', FILTER_SANITIZE_STRING);
+            $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            $password = $_POST['password'];
+            $confirmedpassword = $_POST['confirmedpassword'];
+
+            $passwordLength = strlen($password);
+            $containsDigit = preg_match('/\d/', $password);
+            $containsUpper = preg_match('/[A-Z]/', $password);
+            $containsLower = preg_match('/[a-z]/', $password);
+            $containsSpecial = preg_match('/[^a-zA-Z\d]/', $password);
+
+            if (!$nom || !$prenom || !$date_de_naissance || !$rue || !$ville || !$code_postal || !$telephone || !$email || !$password) {
+
+                $_SESSION['message'] = 'Erreur : données invalides';
+            } elseif ($passwordLength < 12 || !$containsDigit || !$containsUpper || !$containsLower || !
+                $containsSpecial) {
+
+                $_SESSION['message'] = 'Erreur : mot de passe non conforme';
+            }
+            elseif ($this->userModel->getUserByEmail($email) != null) {
+                $_SESSION['message'] = 'Erreur : email déjà utilisée';
+            } elseif ($password != $confirmedpassword) {
+                $_SESSION['message'] = 'Erreur : mot de passe non conforme';
+            }
+            else {
+                // Hachage du mot de passe
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                $user = new User(null, $nom, $prenom, $date_de_naissance, $rue, $ville, $code_postal, $telephone, $email, $hashedPassword, ['user']);
+                // Enregistrez les données de l'utilisateur dans la base de données
+                $result = $this->userModel->createUser($user);
+                if ($result) {
+                    $_SESSION['message'] = 'Votre inscription est terminée';
+                    header('Location: index.php?page=connexion');
+                    exit;
+                } else {
+                    $_SESSION['message'] = 'Erreur lors de l\'inscription';
+                }
+
+            
+            header('Location: index.php?page=inscription');
+            exit;
+            }
+    
+        }
+        echo $this->twig->render('defaultController/inscription.html.twig', []);
+    }
+
+
+
+    public function connexion()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+            $password = $_POST['password'];
+            $user = $this->userModel->getUserByEmail($email);
+            if (!$user) {
+                $_SESSION['message'] = 'Utilisateur ou mot de passe erroné';
+                header('Location: index.php?page=connexion');
+            } else {
+                if ($user->verifyPassword($password)) {
+                    $_SESSION['connexion'] = $user->getEmail(); 
+                    $_SESSION['roles'] = $user->getRoles();
+                    header('Location: index.php');
+                    exit;
+                } else {
+                    $_SESSION['message'] = 'Utilisateur ou mot de passe erroné';
+                    header('Location: index.php?page=connexion');
+                    exit;
+                }
+            }
+        }
+        echo $this->twig->render('defaultController/connexion.html.twig', []);
+    }
+
+    public function deconnexion()
+    {
+        $_SESSION = array();
+        session_destroy();
+        header('Location: index.php');
+        exit;
+    }
+
+    public function profil()
+    {
+        if (isset($_SESSION['connexion'])){ //si la clé login existe dans $_SESSION c'est que la personne est connectée
+            $user = $this->userModel->getUserByEmail($_SESSION['connexion']);
+        }
+        echo $this->twig->render('defaultController/profil.html.twig', ['user'=>$user]);
     }
 
 }

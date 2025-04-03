@@ -12,21 +12,25 @@
 					<table class="table table-hover">
 						<thead>
 							<tr>
-								<th width="40%" scope="col" class="text-white">Désignation</th>
+								<th width="40%" scope="col" class="text-white">Photo</th>
 								<th width="20%" scope="col" class="text-white">Prix</th>
 								<th width="50%" scope="col" class="text-white">Description</th>
 								<th width="20%" scope="col" class="text-white">Stock</th>
 								<th width="20%" scope="col" class="text-white">Type</th>
+								<th width="20%" scope="col" class="text-white">Image</th>
+								<th width="20%" scope="col" class="text-white">Ajouter</th>
 							</tr>
 						</thead>
 						<tbody>
 							{% for p in products %}
 								<tr class="{{ cycle(['table- primary','table-secondary'], loop.index0) }}">
-									<td>{{ p.nom }}</td>
+									<td> {% if (p.image) %} <img src"images/produits/{{p.image}}" alt="{{p.nom}}" class="image"/> {% endif %} </td>
 									<td>{{ p.prix }}€</td>
 									<td>{{ p.description }}</td>
 									<td>{{ p.stock }}</td>
 									<td>{{ p.type.label }}</td>
+									<td><img style="width: 250px" class="imgprod" src="images/produits/{{ p.image }}"/></td>
+									<td><a href="index.php?page=addProducts" class="btn btn-primary">Ajouter</a></td>
 								</tr>
 							{% endfor %}
 						</tbody>

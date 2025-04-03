@@ -1,15 +1,25 @@
 {% extends "base.html.twig" %}
 
 {% block title %} {{ parent() }} Accueil {% endblock %}
-       
-{% block content %} 
+
+{% block content %}
     <div class="container-fluid">
-		<div class="row justify-content-center">
-			<div class="col-12 col-md-10 text-primary">
-				 <h1 class="text-center">Site fonctionnel</h1> 
-
-
-			</div>
-		</div>
-	</div>
-{% endblock %} 
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10">
+                <h1 class="text-center text-light">Bienvenue</h1>
+                {% for p in products %}
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" src="images/produits/{{ p.image }}" alt="Card image">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ p.nom }}</h5>
+                            <p class="card-text">{{ p.type.label }} - {{ p.prix }}€</p>
+                            <a href="index.php?page=showProduct&id={{p.id}}" class="btn btn-primary">Afficher Plus</a>
+                            <a href="index.php?page=ajoutPanier&id={{p.id}}" class="btn btn-primary">Ajouter dans le panier</a>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

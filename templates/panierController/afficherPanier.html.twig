@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	{{ parent() }}
+	Panier
+{% endblock %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-10">
+				<h1 class="text-center text-dark">Panier</h1>
+				<div class="table-responsive">
+					<table class="table table-hover">
+            {% if contenu | length == 0 %}
+                <div class="alert-info text-center">
+                    Votre panier est vide
+                </div>
+            {% endif %}
+            <thead>
+				<tr>
+					<th width="40%" scope="col" class="text-white">Nom produit</th>
+					<th width="20%" scope="col" class="text-white">Quantité</th>
+					<th width="50%" scope="col" class="text-white">Modifier</th>
+					<th width="20%" scope="col" class="text-white">Supprimer</th>
+					<th width="20%" scope="col" class="text-white">Prix</th>
+					<th width="20%" scope="col" class="text-white">Total</th>
+				</tr>
+			</thead>
+            <tbody>
+            {% for ligne in contenu %}
+            	<tr class="{{ cycle(['table- primary','table-secondary'], loop.index0) }}">
+                <td>{{ligne.product.nom}}</td>
+                <td>{{ligne.qte}}</td>
+                <td><i class="bi bi-dash"><i class="bi bi-plus-lg"></i></i></td>
+				<td><a href="index.php?page=deleteProducts&id={{product.id}}">
+						<i class="bi bi-trash2-fill"></i><br/></td>
+            {% endfor %}
+            </tbody>
+			</div>
+		</div>
+	</div>
+{% endblock %} 
