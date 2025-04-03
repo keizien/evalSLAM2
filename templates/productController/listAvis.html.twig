@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+{% block title %}
+	{{ parent() }}
+	Liste des produits
+{% endblock %}
+{% block content %}
+	<div class="container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-10">
+				<h1 class="text-center text-dark">Liste des produits</h1>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th width="40%" scope="col" class="text-white">Commentaire</th>
+								<th width="40%" scope="col" class="text-white">Note</th>
+								
+							</tr>
+						</thead>
+						<tbody>
+							{% for p in products %}
+								<tr class="{{ cycle(['table- primary','table-secondary'], loop.index0) }}">
+									<td> {% if (p.image) %} <img src"images/produits/{{p.image}}" alt="{{p.nom}}" class="image"/> {% endif %} </td>
+									<td>{{ a.commentaire }}€</td>
+									<td>{{ a.note }}</td>
+									<td>{{ p.stock }}</td>
+									<td>{{ a.user.prenom }}</td>
+									<td>{{ a.produit.nom }}</td>
+									<td><img style="width: 250px" class="imgprod" src="images/produits/{{ p.image }}"/></td>
+									<td><a href="index.php?page=addProducts" class="btn btn-primary">Ajouter</a></td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -18,9 +18,9 @@ class AvisModel
     public function getAllAvis(): array
     {
         $sql = "SELECT a.id as idAvis, commentaire, note, p.id as idProduit, nom, prix, description, stock, idType, image
-        FROM Avis a inner join Produit p on a.idProduit = p.id order by commentaire";
-        $sql = "SELECT a.id as idAvis, commentaire, note, u.id as idUser, nom, prenom, date_de_naissance, rue, ville, code_postal, telephone, email, password
-        FROM Avis a inner join User u on a.idUser = u.id order by commentaire";         
+        FROM Avis a inner join Produit p on a.idProduit = p.id order by note";
+        $sql = "SELECT a.id as idAvis, commentaire, note, u.id as idUser, nom, prenom, date_de_naissance, rue, ville, code_postal, telephone, email, password, roles
+        FROM Avis a inner join User u on a.idUser = u.id order by note";         
         $stmt = $this->db->query($sql);
         $avis = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -35,9 +35,9 @@ class AvisModel
     public function getOneAvis(int $id): ?Avis
     {
         $sql = "SELECT a.id as idAvis, commentaire, note, p.id as idProduit, nom, prix, description, stock, idType, image
-        FROM Avis a inner join Produit p on a.idProduit = p.id order by commentaire";
-        $sql = "SELECT a.id as idAvis, commentaire, note, u.id as idUser, nom, prenom, date_de_naissance, rue, ville, code_postal, telephone, email, password
-        FROM Avis a inner join User u on a.idUser = u.id order by commentaire";       
+        FROM Avis a inner join Produit p on a.idProduit = p.id order by note";
+        $sql = "SELECT a.id as idAvis, commentaire, note, u.id as idUser, nom, prenom, date_de_naissance, rue, ville, code_postal, telephone, email, password, roles
+        FROM Avis a inner join User u on a.idUser = u.id order by note";       
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(":id", $id);
         $stmt->execute();

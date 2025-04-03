@@ -64,6 +64,7 @@ class Router
             'avisProduct' => [AvisController::class, 'avisProduct', []],
             'showAvis' => [AvisController::class, 'showAvis', []],
             'addAvis' => [AvisController::class, 'addAvis', []],
+            'listAvis' => [AvisController::class, 'listAvis', []],
             'deleteAvis' => [AvisController::class, 'deleteAvis', ['admin']],
         ];
         $this->defaultPage = 'home';

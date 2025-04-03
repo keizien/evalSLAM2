@@ -75,4 +75,11 @@ class AvisController
         echo $this->twig->render('productController/showAvis.html.twig', ['avis' => $avis,'user'=> $user, 'product' => $product]);
     }
 
+    public function listAvis()
+    {
+        $avis = $this->avisModel->getAllAvis();
+        echo $this->twig->render('productController/listAviss.html.twig',
+            ['avis' => $avis]);
+    }
+
 } 
